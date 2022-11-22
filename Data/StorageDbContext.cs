@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using VideoStream.Model;
 
 namespace VideoStream.Data
 {
@@ -8,8 +9,11 @@ namespace VideoStream.Data
         {
         }
 
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Operation> Operations { get; set; }
+        public DbSet<VideoDescription> VideoDescriptions { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<VideoDescription>().ToTable("Description");
+        }
     }
 }

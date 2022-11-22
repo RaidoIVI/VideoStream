@@ -1,20 +1,21 @@
-﻿using VideoStream.Data;
+﻿using Microsoft.Extensions.FileProviders;
+using VideoStream.Data;
 using VideoStream.Model;
 
 namespace VideoStream.Domain
 {
-    public interface IVideoController
+    public interface IVideoManager
     {
         Task<ICollection<VideoDescription>> GetList();
-        Task<VideoFile> GetFile(Guid id);
-        Task Add(VideoDescription description, VideoFile file);
+        Task<IFileInfo> GetFile(Guid id);
+        Task Add(VideoDescription description);
     }
 
-    public class VideoController : IVideoController
+    public class VideoManager : IVideoManager
     {
         private readonly IVideoFileRepo _videoFileRepo;
 
-        public VideoController(IVideoFileRepo videoFileRepo)
+        public VideoManager(IVideoFileRepo videoFileRepo)
         {
             _videoFileRepo = videoFileRepo;
         }
@@ -25,15 +26,15 @@ namespace VideoStream.Domain
             return result;
         }
 
-        public async Task<VideoFile> GetFile(Guid id)
+        public async Task<IFileInfo> GetFile(Guid id)
         {
             var result = await _videoFileRepo.GetFile(id);
             return result;
         }
 
-        public async Task Add(VideoDescription description, VideoFile file)
+        public async Task Add(VideoDescription description)
         {
-            await _videoFileRepo.Add(description, file);
+            await _videoFileRepo.Add(description);
         }
     }
 }
